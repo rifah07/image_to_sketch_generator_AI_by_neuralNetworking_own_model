@@ -104,7 +104,7 @@ model.compile(optimizer=Adam(learning_rate=0.001), loss='binary_crossentropy')
 # Train the model
 model.fit(generator(input_generator, target_generator),
           steps_per_epoch=len(input_generator),
-          epochs=50)
+          epochs=100)
 
 # Save the model in the native Keras format
 model.save('models/sketch_model.keras')
