@@ -5,15 +5,12 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate
 from tensorflow.keras.optimizers import Adam
 
-# Define paths
-data_dir = 'data/images'
+data_dir = 'dataset'
 input_images_path = os.path.join(data_dir, 'inputs')
 target_images_path = os.path.join(data_dir, 'targets')
 
-# Image size
 img_size = (256, 256)
 
-# Data augmentation parameters
 data_gen_args = dict(
     rescale=1./255,
     rotation_range=20,
@@ -25,7 +22,6 @@ data_gen_args = dict(
     fill_mode='nearest'
 )
 
-# Data generators
 input_gen = ImageDataGenerator(**data_gen_args)
 target_gen = ImageDataGenerator(**data_gen_args)
 
@@ -53,21 +49,11 @@ def generator(input_gen, target_gen):
         targets = next(target_gen)
         yield (inputs, targets)
 
-
-# The U-Net architecture is widely used for image segmentation tasks, where the goal is to assign 
-# a label to each pixel in the image. 
-# It consists of a contracting path (encoder)
-# and an expansive path (decoder), with skip connections 
-# that transfer information from the encoder to the decoder.
-
-# U-Net model
 def unet_model(input_size=(256, 256, 3)):
     inputs = Input(input_size)
-    conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(inputs) #Encoding Path (Contracting Path)
+    conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(inputs)
     conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(conv1)
     pool1 = MaxPooling2D(pool_size=(2, 2))(conv1)
-    #ReLU (Rectified Linear Activation) is a widely used activation function in neural networks.
-    #It introduces non-linearity, aiding in complex pattern recognition.
 
     conv2 = Conv2D(128, (3, 3), activation='relu', padding='same')(pool1)
     conv2 = Conv2D(128, (3, 3), activation='relu', padding='same')(conv2)
@@ -83,10 +69,8 @@ def unet_model(input_size=(256, 256, 3)):
 
     conv5 = Conv2D(1024, (3, 3), activation='relu', padding='same')(pool4)
     conv5 = Conv2D(1024, (3, 3), activation='relu', padding='same')(conv5)
-    #Two convolutional layers with 1024 filters each.
-    #This block forms the bottleneck of the U-Net, capturing the most abstract features.
 
-    up6 = concatenate([UpSampling2D(size=(2, 2))(conv5), conv4], axis=3)#Decoding Path (Expansive Path), Up-sampling Blocks
+    up6 = concatenate([UpSampling2D(size=(2, 2))(conv5), conv4], axis=3)
     conv6 = Conv2D(512, (3, 3), activation='relu', padding='same')(up6)
     conv6 = Conv2D(512, (3, 3), activation='relu', padding='same')(conv6)
 
@@ -108,14 +92,11 @@ def unet_model(input_size=(256, 256, 3)):
 
     return model
 
-# Build and compile the U-Net model
 model = unet_model()
 model.compile(optimizer=Adam(learning_rate=0.001), loss='binary_crossentropy')
 
-# Train the model
 model.fit(generator(input_generator, target_generator),
           steps_per_epoch=len(input_generator),
           epochs=100)
 
-# Save the model in the native Keras format
 model.save('models/sketch_model.keras')
