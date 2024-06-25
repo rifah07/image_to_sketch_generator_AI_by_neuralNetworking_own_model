@@ -5,7 +5,7 @@ from modelForModels import convert_to_sketch
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'main/all_uploaded_Images/'
-app.config['SKETCHS_FOLDER'] = 'main/static/all_output_sketches/'
+app.config['SKETCHS_FOLDER'] = 'main/static/allOutput_sketches/'
 
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
