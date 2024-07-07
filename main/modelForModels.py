@@ -20,7 +20,7 @@ def convert_to_sketch(image_path):
     sketch_r = cv2.resize(sketch, (givenImages_width, givenImages_height))
 
     sketch_filename = os.path.splitext(os.path.basename(image_path))[0] + '_sketch_by_rifah.png'
-    sketch_path = os.path.join('main/static/allOutput_sketches', sketch_filename)
+    sketch_path = os.path.join('main/static/output_sketches', sketch_filename)
     cv2.imwrite(sketch_path, sketch_r)
 
     return sketch_path

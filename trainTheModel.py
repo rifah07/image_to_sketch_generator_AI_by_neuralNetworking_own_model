@@ -5,9 +5,9 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate
 from tensorflow.keras.optimizers import Adam
 
-data_dir = 'dataset'
+data_dir = 'dataset_images'
 input_images_path = os.path.join(data_dir, 'inputs')
-target_images_path = os.path.join(data_dir, 'targets')
+target_images_path = os.path.join(data_dir, 'p_sketches')
 
 img_size = (256, 256)
 
@@ -97,6 +97,6 @@ model.compile(optimizer=Adam(learning_rate=0.001), loss='binary_crossentropy')
 
 model.fit(generator(input_generator, target_generator),
           steps_per_epoch=len(input_generator),
-          epochs=100)
+          epochs=50)
 
 model.save('models/sketch_model.keras')

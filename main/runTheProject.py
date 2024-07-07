@@ -5,7 +5,7 @@ from modelForModels import convert_to_sketch
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'main/all_uploaded_Images/'
-app.config['SKETCHS_FOLDER'] = 'main/static/allOutput_sketches/'
+app.config['SKETCHS_FOLDER'] = 'main/static/output_sketches/'
 
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
@@ -24,7 +24,7 @@ def index():
             file.save(filepath)
             sketch_filepath = convert_to_sketch(filepath)
             filename=os.path.basename(sketch_filepath)
-            sketch_url = url_for('static', filename=f'allOutput_sketches/{filename}')
+            sketch_url = url_for('static', filename=f'output_sketches/{filename}')
     return render_template('index.html', sketch_url=sketch_url)
 
 
