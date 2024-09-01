@@ -97,6 +97,6 @@ model.compile(optimizer=Adam(learning_rate=0.001), loss='binary_crossentropy')
 
 model.fit(generator(input_generator, target_generator),
           steps_per_epoch=len(input_generator),
-          epochs=50)
+          epochs=130)
 
 model.save('models/sketch_model.keras')
